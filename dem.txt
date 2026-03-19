@@ -1,4 +1,0 @@
-coverage run -m unittest tests_unit.py
-coverage report
-
-bandit -r report_tool.py

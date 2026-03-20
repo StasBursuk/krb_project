@@ -105,9 +105,26 @@ def start_flow():
     
     threading.Thread(target=generation_task, args=(desc, reg_var.get(), screen_var.get(), wait_window)).start()
 
+def create_ticket(description: str, category: str, system_data: dict) -> dict:
+    """
+    Створює нову заявку в базі даних техпідтримки.
+
+    Args:
+        description (str): Текстовий опис проблеми від користувача.
+        category (str): Категорія проблеми (наприклад, 'Мережа', 'ПЗ').
+        system_data (dict): Словник із системними метриками (CPU, RAM, IP).
+
+    Returns:
+        dict: Словник із створеним об'єктом заявки та його ID.
+
+    Raises:
+        DatabaseError: Якщо не вдалося підключитися до PostgreSQL.
+    """
+    pass
+
 # GUI Setup 
 root = tk.Tk()
-root.title("IT Support v2.0")
+root.title("IT Support")
 root.geometry("400x500")
 
 tk.Label(root, text="Опис проблеми:").pack(pady=5)

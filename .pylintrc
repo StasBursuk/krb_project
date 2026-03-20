@@ -1,0 +1,5 @@
+[MASTER]
+ignore=venv,tests
+[MESSAGES CONTROL]
+disable=C0114,C0115,C0116  # Відключаємо вимогу docstrings
+max-line-length=100

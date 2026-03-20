@@ -1,13 +1,13 @@
+import os
+from typing import Optional
 from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-from typing import Optional
-import os
 from dotenv import load_dotenv
 
 # Імпортуємо наші функції для БД
 # Якщо запускаєш через 'uvicorn backend.main:app', використовуй .database
-from .database import get_db_connection, init_db 
+from .database import get_db_connection, init_db
 
 load_dotenv()
 app = FastAPI(title="IT Support System API")
@@ -42,7 +42,7 @@ async def create_ticket(ticket: Ticket, _ = Depends(verify_api_key)):
             INSERT INTO support_tickets 
             (hostname, username, ip_address, ping_status, registry_category, problem_description, screenshot_path)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (ticket.hostname, ticket.username, ticket.ip_address, ticket.ping_status, 
+        """, (ticket.hostname, ticket.username, ticket.ip_address, ticket.ping_status,
               ticket.registry_category, ticket.problem_description, ticket.screenshot_path))
         conn.commit()
         cur.close()
@@ -111,7 +111,7 @@ async def admin_panel():
         for t in tickets:
             # Обрізаємо довгий опис для таблиці
             short_desc = (t['problem_description'][:50] + '...') if len(t['problem_description']) > 50 else t['problem_description']
-            
+        
             rows += f"""
             <tr>
                 <td>{t['id']}</td>

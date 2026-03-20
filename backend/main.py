@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 # Імпортуємо наші функції для БД
 # Якщо запускаєш через 'uvicorn backend.main:app', використовуй .database
-from .database import get_db_connection, init_db
+from backend.database import get_db_connection, init_db
 
 load_dotenv()
 app = FastAPI(title="IT Support System API")
@@ -49,7 +49,7 @@ async def create_ticket(ticket: Ticket, _ = Depends(verify_api_key)):
         conn.close()
         return {"status": "success"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.get("/admin/ticket/{ticket_id}", response_class=HTMLResponse)
 async def view_ticket_details(ticket_id: int):
@@ -94,7 +94,7 @@ async def view_ticket_details(ticket_id: int):
             </body>
         </html>
         """
-    except Exception as e:
+    except ConnectionError as e:
         return f"<h1>Помилка: {e}</h1>"
 
 @app.get("/admin", response_class=HTMLResponse)
@@ -111,7 +111,6 @@ async def admin_panel():
         for t in tickets:
             # Обрізаємо довгий опис для таблиці
             short_desc = (t['problem_description'][:50] + '...') if len(t['problem_description']) > 50 else t['problem_description']
-        
             rows += f"""
             <tr>
                 <td>{t['id']}</td>
@@ -152,6 +151,6 @@ async def admin_panel():
             </body>
         </html>
         """
-    except Exception as e:
+    except ConnectionError as e:
         return f"<h1>Помилка БД: {e}</h1>"
     

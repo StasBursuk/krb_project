@@ -44,3 +44,42 @@
 Натисніть "Відправити заявку".
 
 Адміністратор миттєво побачить ваше звернення разом із результатами діагностики в адмін-панелі за адресою 127.0.0.1:8000/admin.
+
+## 👩‍💻 Посібник для швидкого старту (Developer Guide)
+
+### 1. Системні вимоги
+* **Python 3.10+** (скачати з python.org)
+* **Git** (скачати з git-scm.com)
+* **PostgreSQL 14+** (або Docker Desktop)
+
+### 2. Клонування проєкту
+Bash
+git clone [https://github.com/StasBursuk/krb_project.git](https://github.com/StasBursuk/krb_project.git)
+cd krb_project 
+
+### 3. Налаштування середовища
+Створіть віртуальне оточення та встановіть залежності:
+
+Bash
+python -m venv venv
+# Windows:
+.\venv\Scripts\activate
+# Linux/macOS:
+source venv/bin/activate
+
+pip install -r requirements.txt
+### 4. Налаштування бази даних
+Створіть БД у PostgreSQL (наприклад, it_support_db).
+
+Скопіюйте файл .env.example у .env та вкажіть свої дані:
+DATABASE_URL=postgresql://user:password@localhost:5432/it_support_db
+
+### 5. Запуск проєкту
+Запуск серверної частини (API):
+
+Bash
+uvicorn backend.main:app --reload
+Запуск клієнтського додатку:
+
+Bash
+python client/report_tool.py

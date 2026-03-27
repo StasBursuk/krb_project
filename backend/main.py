@@ -1,6 +1,7 @@
 import os
 from typing import Optional
 from fastapi import FastAPI, HTTPException, Depends, Header
+from pyinstrument import Profiler
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -170,4 +171,29 @@ async def admin_panel():
         """
     except ConnectionError as e:
         return f"<h1>Помилка БД: {e}</h1>"
+
+@app.get("/api/debug/profile-tickets")
+async def profile_get_tickets():
+    """
+    Ендпоінт для профілювання продуктивності отримання списку заявок.
+    Виводить звіт у форматі HTML.
+    """
+    profiler = Profiler(interval=0.001) # Інтервал 1мс
+    profiler.start()
+
+    # Оригінальний код логіки
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT * FROM support_tickets ORDER BY id DESC")
+        tickets = cur.fetchall()
+        cur.close()
+        conn.close()
+    except Exception as e:
+        profiler.stop()
+        raise HTTPException(status_code=500, detail=str(e))
+
+    profiler.stop()
     
+    # Звіт
+    return HTMLResponse(content=profiler.output_html())    
